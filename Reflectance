@@ -1,0 +1,35 @@
+import numpy as np
+import matplotlib.pyplot as plt 
+from numpy.lib import scimath as scip
+n1=1 #refractive index of incident medium
+n2=1.5 #refractive index of transmitted medium
+theta=np.arange(0,90,0.01) # theta
+thetar=(np.pi/180)*theta #converting theta to radians
+n=n2/n1
+#reflectaion coefficients from Fresnel equation
+rTE=(np.cos(thetar)-scip.sqrt(np.power(n,2)-np.power(np.sin(thetar),2)))/(np.cos(thetar)+scip.sqrt(np.power(n,2)-np.power(np.sin(thetar),2)))
+rTM=(np.power(n,2)*np.cos(thetar)-scip.sqrt(np.power(n,2)-np.power(np.sin(thetar),2)))/(np.power(n,2)*np.cos(thetar)+scip.sqrt(np.power(n,2)-np.power(np.sin(thetar),2)))
+#Reflectance 
+RTE=np.power(np.abs(rTE),2)
+RTM=np.power(np.abs(rTM),2)
+#Plot
+ax = plt.subplot(111)
+plt.plot(theta,RTE,label='TE')
+plt.plot(theta,RTM, label='TM')
+plt.xlabel('theta')
+plt.ylabel('Reflectance')
+plt.show()
+plt.title('Reflectance of light at an interface')
+brew=theta[np.argmin(RTM)]
+#offset_from = OffsetFrom(an1, (0.5, 0))
+tir=theta[np.argmax(RTM)]
+an1 = ax.annotate("TIR", xy=(tir, 1), xycoords="data",
+                  xytext=((tir-10),0.9),
+                  va="top", ha="center",
+                  bbox=dict(boxstyle="round", fc="w"),
+                  arrowprops=dict(arrowstyle="->"))
+an2 = ax.annotate("Brewester's angle", xy=(brew, 0), xycoords="data",
+                  xytext=(brew,0.5),
+                  va="top", ha="center",
+                  bbox=dict(boxstyle="round", fc="w"),
+                  arrowprops=dict(arrowstyle="->"))
